@@ -17,12 +17,9 @@ namespace DeepNN
         public Node()
         {
             InConnections = new List<Connection>();
-<<<<<<< HEAD
             OutConnections = new List<Connection>();
-=======
-            OutConnection = new List<Connection>();
->>>>>>> a74e4d3f8c7b767eca3fa098631131ae55a5b68c
-            Bias = Network.GetRandomBias();
+            OutConnections = new List<Connection>();
+            Bias = Network.GetRandom();
         }
         public Node(IEnumerable<Node> inNodes) : this()
         {
