@@ -37,7 +37,7 @@ namespace DeepNN
         {
             if (target == null)
                 return Gradient = OutConnections.Sum(a => a.OutNode.Gradient * a.Weight)
-                                                                             * Sigmoid.Output(Value);
+                                                                             * Sigmoid.Derivative(Value);
             return Gradient = Cost.Derivative(Value, target.Value) * Sigmoid.Derivative(Value);
         }
 

@@ -7,6 +7,7 @@
         public List<Node> OutputLayer { get; set; }
         public double LearnRate { get; set; }
         public double Momentum { get; set; }
+        private static int Count = 0;
 
         private static readonly Random random = new Random();
         public Network()
@@ -50,5 +51,36 @@
         }
         internal static double GetRandom()
             => 2 * random.NextDouble() - 1;
+        public void Train(List<Data> data, int epochs)
+        {
+            for (int i = 0; i < epochs; i++)
+            {
+                foreach (var item in data)
+                {
+                    ForwardPropagate(item.Values);
+                    BackwardPropagate(item.Targets);
+                }
+            }
+        }
+        public void Train(List<Data> data, double minError)
+        {
+            var error = 1.0;
+            var epochs = 0;
+            while(error > minError && epochs < int.MaxValue)
+            {
+                var errors = new List<double>();
+                foreach (var item in data)
+                {
+                    ForwardPropagate(item.Values);
+                    BackwardPropagate(item.Targets);
+                    errors.Add(CalculateError(item.Targets));
+                }
+                error = errors.Average();
+                epochs++;
+            }
+        }
+
+        private double CalculateError(params double[] targets)
+            => OutputLayer.Sum(a => Cost.Error(a.Value, targets[Count++]));
     }
 }
