@@ -7,6 +7,7 @@
         public List<Node> OutputLayer { get; set; }
         public double LearnRate { get; set; }
         public double Momentum { get; set; }
+
         private static readonly Random random = new Random();
         public Network()
         {
@@ -25,8 +26,10 @@
             LearnRate = learnRate ?? 0.4;
             Momentum = momentum ?? 0.9;
 
+
             for (int i = 0; i < inputSize; i++)
                 InputLayer.Add(new Node());
+
 
             var firstHiddenLayer = new List<Node>();
             for (int i = 0; i < hiddenSize[0]; i++)
@@ -45,5 +48,7 @@
             for (int i = 0; i < outputSize; i++)
                 OutputLayer.Add(new Node(HiddenLayers.Last()));
         }
+        internal static double GetRandom()
+            => 2 * random.NextDouble() - 1;
     }
 }

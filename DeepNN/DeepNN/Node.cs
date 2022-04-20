@@ -30,5 +30,8 @@ namespace DeepNN
                 InConnections.Add(connection);
             }
         }
+        public double CalculateValue()
+            => Value = Sigmoid.Output(InConnections.Sum(a => a.Weight * a.InNode.Value) + Bias);
+
     }
 }

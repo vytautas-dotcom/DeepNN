@@ -2,8 +2,8 @@
 {
     public class Connection
     {
-        private Node InNode { get; set; }
-        private Node OutNode { get; set; }
+        public Node InNode { get; set; }
+        public Node OutNode { get; set; }
         public double Weight { get; set; }
         public double DeltaWeight { get; set; }
 
