@@ -33,5 +33,27 @@ namespace DeepNN
         public double CalculateValue()
             => Value = Sigmoid.Output(InConnections.Sum(a => a.Weight * a.InNode.Value) + Bias);
 
+        public double CalculateGradient(double? target = null)
+        {
+            if (target == null)
+                return Gradient = OutConnections.Sum(a => a.OutNode.Gradient * a.Weight)
+                                                                             * Sigmoid.Output(Value);
+            return Gradient = Cost.Derivative(Value, target.Value) * Sigmoid.Derivative(Value);
+        }
+
+        public void UpdateWeights(double learnRate, double momentum)
+        {
+            var preDelta = DeltaBias;
+            DeltaBias = learnRate * Gradient;
+            Bias += DeltaBias + momentum * preDelta;
+
+            foreach (var connection in InConnections)
+            {
+                preDelta = connection.DeltaWeight;
+                connection.DeltaWeight = learnRate * Gradient * connection.InNode.Value;
+                connection.Weight += connection.DeltaWeight + momentum * preDelta;
+            }
+        }
+
     }
 }

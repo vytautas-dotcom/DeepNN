@@ -23,8 +23,8 @@
             InputLayer = new List<Node>();
             HiddenLayers = new List<List<Node>>();
             OutputLayer = new List<Node>();
-            LearnRate = learnRate ?? 0.4;
-            Momentum = momentum ?? 0.9;
+            LearnRate = learnRate ?? 0.05;
+            Momentum = momentum ?? 0.1;
 
 
             for (int i = 0; i < inputSize; i++)
