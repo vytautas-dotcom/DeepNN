@@ -61,6 +61,7 @@
                     BackwardPropagate(item.Targets);
                 }
             }
+
         }
         public void Train(List<Data> data, double minError)
         {
@@ -82,5 +83,23 @@
 
         private double CalculateError(params double[] targets)
             => OutputLayer.Sum(a => Cost.Error(a.Value, targets[Count++]));
+
+        private void ForwardPropagate(double[] values)
+        {
+            var index = 0;
+            InputLayer.ForEach(node => node.Value = values[index++]);
+            HiddenLayers.ForEach(layer => layer.ForEach(node => node.CalculateValue()));
+            OutputLayer.ForEach(node => node.CalculateValue());
+        }
+        private void BackwardPropagate(double[] targets)
+        {
+            var index = 0;
+            OutputLayer.ForEach(node => node.CalculateGradient(targets[index++]));
+            HiddenLayers.Reverse();
+            HiddenLayers.ForEach(layer => layer.ForEach(node => node.CalculateGradient()));
+            HiddenLayers.ForEach(layer => layer.ForEach(node => node.UpdateWeights(LearnRate, Momentum)));
+            HiddenLayers.Reverse();
+            OutputLayer.ForEach(node => node.UpdateWeights(LearnRate, Momentum));
+        }
     }
 }
