@@ -101,5 +101,13 @@
             HiddenLayers.Reverse();
             OutputLayer.ForEach(node => node.UpdateWeights(LearnRate, Momentum));
         }
+        public void Test(List<Data> data)
+        {
+            foreach (var item in data)
+            {
+                ForwardPropagate(item.Values);
+            }
+            OutputLayer.ForEach(x => Console.WriteLine(x.Value));
+        }
     }
 }
