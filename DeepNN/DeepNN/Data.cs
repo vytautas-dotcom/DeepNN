@@ -65,9 +65,10 @@
 
         public void EnterSamples(int numSamples, int numInput, int? numOutput)
         {
+
             for (int i = 0; i < numSamples; i++)
             {
-                EnterNumbers(numInput, numOutput.Value);
+                EnterNumbers(numInput, numOutput ?? null);
             }
         }
     }

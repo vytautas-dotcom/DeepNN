@@ -45,13 +45,13 @@ namespace DeepNN
         {
             var preDelta = DeltaBias;
             DeltaBias = learnRate * Gradient;
-            Bias += DeltaBias + momentum * preDelta;
+            Bias -= (DeltaBias + momentum * preDelta);
 
             foreach (var connection in InConnections)
             {
                 preDelta = connection.DeltaWeight;
                 connection.DeltaWeight = learnRate * Gradient * connection.InNode.Value;
-                connection.Weight += connection.DeltaWeight + momentum * preDelta;
+                connection.Weight -= (connection.DeltaWeight + momentum * preDelta);
             }
         }
 

@@ -26,6 +26,7 @@ namespace DeepNN
         }
         public NetworkManager GetTrainingDataFromUser(int trainingSamplesNum)
         {
+            _dataSetList = new DataList();
             _dataSetList.EnterSamples(trainingSamplesNum, _numInputParameters, _numOutputParameters);
             return this;
         }
@@ -42,6 +43,7 @@ namespace DeepNN
 
         public NetworkManager GetTestingDataFromUser(int testingSamplesNum)
         {
+            _testDataSetList = new DataList();
             _testDataSetList.EnterSamples(testingSamplesNum, _numInputParameters, null);
             return this;
         }
