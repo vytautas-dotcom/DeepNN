@@ -23,36 +23,35 @@
 
         private void EnterNumbers(int numInput, int numOutput)
         {
-            string values = "";
-            string targets = "";
+            List<string> values = new List<string>();
+            List<string> targets = new List<string>();
 
             for (int i = 0; i < numInput; i++)
             {
-                Console.WriteLine("enter values eparated by comma");
-                values += Console.ReadLine();
+                Console.WriteLine("enter value and press enter:");
+                string value = Console.ReadLine();
+                values.Add(value);
             }
             for (int i = 0; i < numOutput; i++)
             {
-                Console.WriteLine("enter targets eparated by comma");
-                targets += Console.ReadLine();
+                Console.WriteLine("enter target eparated by comma");
+                string target = Console.ReadLine();
+                targets.Add(target);
             }
 
-            string[] arrValues = values.Split(',');
-            string[] arrTargets = targets.Split(',');
+            double[] arrValues = new double[numInput];
+            double[] arrTargets = new double[numOutput];
 
-            List<double> listValues = new List<double>();
-            List<double> listTargets = new List<double>();
-
-            foreach (var item in arrValues)
+            foreach (var item in values)
             {
-                listValues.Add(Convert.ToDouble(item));
+                arrValues[values.IndexOf(item)] = Convert.ToDouble(item);
             }
-            foreach (var item in arrTargets)
+            foreach (var item in targets)
             {
-                listTargets.Add(Convert.ToDouble(item));
+                arrTargets[targets.IndexOf(item)] = Convert.ToDouble(item);
             }
 
-            this.Add(listValues.ToArray(), listValues.ToArray());
+            this.Add(arrValues, arrTargets);
         }
 
         public void EnterSamples(int numSamples, int numInput, int numOutput)
