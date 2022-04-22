@@ -1,5 +1,6 @@
 ﻿namespace DeepNN
 {
+    [Serializable()]
     public class Connection
     {
         public Node InNode { get; set; }

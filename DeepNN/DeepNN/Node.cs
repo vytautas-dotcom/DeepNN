@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeepNN
 {
+    [Serializable()]
     public class Node
     {
         public List<Connection> InConnections { get; set; }

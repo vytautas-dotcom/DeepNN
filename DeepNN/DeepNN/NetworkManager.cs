@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DeepNN
 {
@@ -14,6 +10,7 @@ namespace DeepNN
         public Network _network { get; set; }
         public DataList _dataSetList;
         public DataList _testDataSetList;
+        public string FileName = "";
         public NetworkManager CreateNetwork(int input, int output, params int[] hidden)
         {
             _numInputParameters = input;
@@ -40,6 +37,16 @@ namespace DeepNN
             _network.Train(data: _dataSetList, epochs: numEpochs);
             return this;
         }
+        public NetworkManager SerializeNetwork(string fileName)
+        {
+            FileName = @$"../../../{fileName}.bin";
+            Stream stream = File.Create(FileName);
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            binaryFormatter.Serialize(stream, _network);
+            stream.Close();
+
+            return this;
+        }
 
         public NetworkManager GetTestingDataFromUser(int testingSamplesNum)
         {
@@ -49,7 +56,20 @@ namespace DeepNN
         }
         public void TestNetworkToMinimum()
         {
-            _network.Test(data: _testDataSetList);
+            Network network = new Network();
+            if (File.Exists(FileName))
+            {
+                Console.WriteLine("Reading saved file");
+                Stream openFileStream = File.OpenRead(FileName);
+                BinaryFormatter deserializer = new BinaryFormatter();
+                network = (Network)deserializer.Deserialize(openFileStream);
+                openFileStream.Close();
+                network.Test(data: _testDataSetList);
+            }
+            else
+            {
+                Console.WriteLine("Network not found.");
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace DeepNN
 {
+    [Serializable()]
     public class Network
     {
         public List<Node> InputLayer { get; set; }
@@ -7,7 +8,6 @@
         public List<Node> OutputLayer { get; set; }
         public double LearnRate { get; set; }
         public double Momentum { get; set; }
-        private static int Count = 0;
 
         private static readonly Random random = new Random();
         public Network()
@@ -82,7 +82,10 @@
         }
 
         private double CalculateError(params double[] targets)
-            => OutputLayer.Sum(a => Cost.Error(a.Value, targets[Count++]));
+        {
+            int count = 0;
+            return OutputLayer.Sum(a => Cost.Error(a.Value, targets[count++]));
+        }
 
         private void ForwardPropagate(double[] values)
         {
