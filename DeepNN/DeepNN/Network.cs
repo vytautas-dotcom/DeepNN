@@ -112,5 +112,85 @@
             }
             OutputLayer.ForEach(x => Console.WriteLine(x.Value));
         }
+        //-------------------train for directions--------------------
+        public void Train_Directions(List<(double[], double[])> data, int epochs)
+        {
+            for (int i = 0; i < epochs; i++)
+            {
+                foreach (var item in data)
+                {
+                    ForwardPropagate(item.Item1);
+                    BackwardPropagate(item.Item2);
+                }
+            }
+
+        }
+        public void Train_Directions(List<(double[], double[])> data, double minError)
+        {
+            var error = 1.0;
+            var epochs = 0;
+            while (error > minError && epochs < int.MaxValue)
+            {
+                var errors = new List<double>();
+                foreach (var item in data)
+                {
+                    ForwardPropagate(item.Item1);
+                    BackwardPropagate(item.Item2);
+                    errors.Add(CalculateError(item.Item2));
+                }
+                error = errors.Average();
+                epochs++;
+            }
+        }
+        public void Test_Directions(List<(double[], double[], string)> data)
+        {
+            int count = 0;
+            List<double[]> allCalculatedOutputs = new List<double[]>();
+            double[] calculatedOutput;
+            foreach (var item in data)
+            {
+                int i = 0;
+                calculatedOutput = new double[item.Item2.Length];
+                ForwardPropagate(item.Item1);
+                OutputLayer.ForEach(x => calculatedOutput[i++] = x.Value);
+                allCalculatedOutputs.Add(calculatedOutput);
+            }
+            for (int i = 0; i < data.Count; i++)
+            {
+                var arr1 = data[i].Item2;
+                var arr2 = MaxToOne(allCalculatedOutputs[i]);
+                if (arr1.SequenceEqual(arr2))
+                    count++;
+            }
+            double accuracy = (double)count / data.Count;
+            Console.WriteLine("Accuracy " + accuracy);
+        }
+        private double[] MaxToOne(double[] val)
+        {
+            double[] convertedArray = new double[val.Length];
+            double biggestVal = 0;
+            int indexOfMax = 0;
+
+            for (int i = 0; i < val.Length; i++)
+            {
+                if (val[i] > biggestVal)
+                {
+                    biggestVal = val[i];
+                    indexOfMax = i;
+                }
+            }
+            for (int i = 0; i < val.Length; i++)
+            {
+                if (i == indexOfMax)
+                {
+                    convertedArray[i] = 1;
+                }
+                else
+                {
+                    convertedArray[i] = 0;
+                }
+            }
+            return convertedArray;
+        }
     }
 }

@@ -71,5 +71,47 @@ namespace DeepNN
                 Console.WriteLine("Network not found.");
             }
         }
+        //------------------Training with direction arrows---------------------
+        public List<(double[], double[], string)> trainData1 { get; set; }
+        public List<(double[], double[], string)> testData1 { get; set; }
+        public DirectionsDataList data { get; set; }
+        public NetworkManager GetTrainingDataFromFile()
+        {
+            data = new DirectionsDataList();
+            data.GetPictures("Directions");
+            data.SplitData(data, out List<(double[], double[], string)> trainData, 
+                                 out List<(double[], double[], string)> testData);
+            trainData1 = new List<(double[], double[], string)>();
+            testData1 = new List<(double[], double[], string)>();
+
+            trainData1 = trainData;
+            testData1 = testData;
+
+            return this;
+        }
+        public NetworkManager TrainNetworkToMinimumError_Directions(double error)
+        {
+            List<(double[], double[])> pixelsData = new List<(double[], double[])>();
+            trainData1.ForEach(x => pixelsData.Add((x.Item1, x.Item2)));
+            _network.Train_Directions(data: pixelsData, minError: error);
+            return this;
+        }
+        public void TestNetworkToMinimum_Directions()
+        {
+            Network network = new Network();
+            if (File.Exists(FileName))
+            {
+                Console.WriteLine("Reading saved file");
+                Stream openFileStream = File.OpenRead(FileName);
+                BinaryFormatter deserializer = new BinaryFormatter();
+                network = (Network)deserializer.Deserialize(openFileStream);
+                openFileStream.Close();
+                network.Test_Directions(data: testData1);
+            }
+            else
+            {
+                Console.WriteLine("Network not found.");
+            }
+        }
     }
 }
